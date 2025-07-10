@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>xxzzyyAI - Chatbot</title>
+  <style>
+    body { background: #0f0f1a; color: white; font-family: sans-serif; padding: 20px; }
+    #chat { max-width: 500px; margin: auto; border: 1px solid #00f0ff; padding: 15px; border-radius: 10px; height: 400px; overflow-y: auto; }
+    .msg { margin: 10px 0; }
+    .bot { color: #94B4C1; }
+    .user { color: #ff00cc; }
+    input { width: 80%; padding: 10px; border-radius: 5px; }
+    button { padding: 10px; background: #00f0ff; border: none; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">🤖 xxzzyyAI (Free OpenRouter)</h1>
+  <div id="chat"></div>
+  <div style="text-align:center;margin-top:10px;">
+    <input id="input" placeholder="Tulis pertanyaan..." />
+    <button onclick="send()">Kirim</button>
+  </div>
+
+  <script>
+    async function send() {
+      const msg = document.getElementById('input').value;
+      if (!msg.trim()) return;
+      document.getElementById('chat').innerHTML += `<div class='msg user'>🧑 Kamu: ${msg}</div>`;
+      document.getElementById('input').value = '';
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ message: msg })
+      });
+      const data = await res.json();
+      document.getElementById('chat').innerHTML += `<div class='msg bot'>🤖 Bot: ${data.reply}</div>`;
+      document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+    }
+  </script>
+</body>
+</html>
